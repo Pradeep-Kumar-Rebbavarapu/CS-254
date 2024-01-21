@@ -1,0 +1,5 @@
+Median: 5.00124e+06
+Median: 5.01067e+06
+Median: 5.024e+06
+Median: 5.01288e+06
+Median: 5011257

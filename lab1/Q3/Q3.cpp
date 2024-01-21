@@ -3,42 +3,42 @@
 #define int long long
 using namespace std;
 
-int n;
+int num_vertices;
 
-vector<vector<int>> adj;
-vector<vector<int>> dp;
+vector<vector<int>> adjacency_matrix;
+vector<vector<int>> memoization_table;
 
-int func(int i, int s){
-    if(dp[i][s] != 0)
-        return dp[i][s];
+int find_shortest_path(int current_vertex, int remaining_vertices_mask){
+    if(memoization_table[current_vertex][remaining_vertices_mask] != 0)
+        return memoization_table[current_vertex][remaining_vertices_mask];
     
-    if(__builtin_popcount(s) == 2)
-        return dp[i][s] = adj[0][i];
+    if(__builtin_popcount(remaining_vertices_mask) == 2)
+        return memoization_table[current_vertex][remaining_vertices_mask] = adjacency_matrix[0][current_vertex];
     
-    int res = INT_MAX;
-    for(int msk = 1; msk < n; msk++)
-        if((s & (1 << msk)) && msk != i)
-            res = min(res, func(msk, s ^ (1 << i)) + adj[msk][i]);
-    return dp[i][s] = res;
+    int result = INT_MAX;
+    for(int next_vertex = 1; next_vertex < num_vertices; next_vertex++)
+        if((remaining_vertices_mask & (1 << next_vertex)) && next_vertex != current_vertex)
+            result = min(result, find_shortest_path(next_vertex, remaining_vertices_mask ^ (1 << current_vertex)) + adjacency_matrix[next_vertex][current_vertex]);
+    return memoization_table[current_vertex][remaining_vertices_mask] = result;
 }
 
 signed main(){
     freopen("test_cases_Q3.txt","r",stdin);
     freopen("output_Q3.txt","w",stdout);
-    int t; cin >> t;
-    while(t--){
-        cin >> n;
-        dp.resize(n);
-        adj.resize(n);
-        for(int i=0; i<n; i++){
-            adj[i].resize(n);
-            for(int j=0; j<n; j++)
-                cin >> adj[i][j];
-            dp[i].resize(1 << n);
+    int test_cases; cin >> test_cases;
+    while(test_cases--){
+        cin >> num_vertices;
+        memoization_table.resize(num_vertices);
+        adjacency_matrix.resize(num_vertices);
+        for(int i=0; i<num_vertices; i++){
+            adjacency_matrix[i].resize(num_vertices);
+            for(int j=0; j<num_vertices; j++)
+                cin >> adjacency_matrix[i][j];
+            memoization_table[i].resize(1 << num_vertices);
         }
-        int ans = INT_MAX;
-        for(int j=1; j<n; j++)
-            ans = min(ans, func(j, (1 << n)-1) + adj[j][0]);
-        cout << ans << endl;
+        int answer = INT_MAX;
+        for(int start_vertex = 1; start_vertex < num_vertices; start_vertex++)
+            answer = min(answer, find_shortest_path(start_vertex, (1 << num_vertices)-1) + adjacency_matrix[start_vertex][0]);
+        cout << answer << endl;
     }
 }
