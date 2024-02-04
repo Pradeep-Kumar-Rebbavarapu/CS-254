@@ -12,10 +12,7 @@ long long max_subsequence(int i, long long &ans, vector<long long> &a){
 }
 
 int main(){
-    freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
-    int t; cin >> t;
-    while(t--){
+    
         int n; cin >> n;
         vector<long long> a(n);
         for(int i=0; i<n; i++)
@@ -23,5 +20,4 @@ int main(){
         long long ans = LLONG_MIN;
         max_subsequence(n-1, ans, a);
         cout << ans << endl;
-    }
 }
