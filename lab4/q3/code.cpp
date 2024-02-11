@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// O(n + k*log(n)) k*log(n) for popping k elements and initializing takes O(n)
+// O(n + n*log(n) + k*log(n)) k*log(n) for popping k elements and initializing takes O(n)
 int pqMethod(vector<int>&arr,int k){
         priority_queue<int> pq(arr.begin(), arr.end());
         for(int i=0; i<k-1; i++)
